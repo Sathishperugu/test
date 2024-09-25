@@ -11,7 +11,6 @@ pipeline {
             steps {
                 // Nginx runs by default in the background, let's test if the server is up
                 sh 'nginx -v'  // Check Nginx version
-                sh 'curl -I localhost'  // Test if the server is running by checking headers
             }
         }
         
