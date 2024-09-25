@@ -6,7 +6,6 @@ pipeline {
             agent {
                 docker {
                     image 'nginx:latest'   // Pulls Nginx web server image
-                    label 'docker-agent'
                 }
             }
             steps {
@@ -21,7 +20,6 @@ pipeline {
             agent {
                 docker {
                     image 'python:3.9'   // Pulls Python image
-                    label 'docker-agent'
                 }
             }
             steps {
@@ -37,7 +35,6 @@ pipeline {
             agent {
                 docker {
                     image 'mysql:5.7'   // Pulls MySQL database image
-                    label 'docker-agent'
                     args '-e MYSQL_ROOT_PASSWORD=rootpass'  // Environment variable for MySQL root password
                 }
             }
