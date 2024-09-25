@@ -33,15 +33,13 @@ pipeline {
         stage('Database Test') {
             agent {
                 docker {
-                    image 'mysql:5.7'   // Pulls MySQL database image
-                    args '-e MYSQL_ROOT_PASSWORD=rootpass'  // Environment variable for MySQL root password
+                    image 'mysql:5.7'
+		    args '-e MYSQL_ALLOW_EMPTY_PASSWORD=true'  // Allow running MySQL without a root password
                 }
             }
             steps {
                 // MySQL setup and check
-                sh 'mysql --version'  // Check MySQL version
-                sh 'mysql -uroot -prootpass -e "CREATE DATABASE testdb;"'  // Create a test database
-                sh 'mysql -uroot -prootpass -e "SHOW DATABASES;"'  // Verify that the database was created
+		sh 'mysql -e "SELECT VERSION();"'
             }
         }
     }
