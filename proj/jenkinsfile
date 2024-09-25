@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+    stages {
+        // 1. Web Server Test (Nginx)
+        stage('Web Server Test') {
+            agent {
+                docker {
+                    image 'nginx:latest'   // Pulls Nginx web server image
+                    label 'docker-agent'
+                }
+            }
+            steps {
+                // Nginx runs by default in the background, let's test if the server is up
+                sh 'nginx -v'  // Check Nginx version
+                sh 'curl -I localhost'  // Test if the server is running by checking headers
+            }
+        }
+        
+        // 2. Programming Language Test (Python)
+        stage('Programming Language Test') {
+            agent {
+                docker {
+                    image 'python:3.9'   // Pulls Python image
+                    label 'docker-agent'
+                }
+            }
+            steps {
+                // Run Python code to test something
+                sh 'python --version'  // Check Python version
+                sh 'echo "print(\'Hello from Python\')" > test.py'  // Create a Python script
+                sh 'python test.py'  // Run the Python script
+            }
+        }
+        
+        // 3. Database Test (MySQL)
+        stage('Database Test') {
+            agent {
+                docker {
+                    image 'mysql:5.7'   // Pulls MySQL database image
+                    label 'docker-agent'
+                    args '-e MYSQL_ROOT_PASSWORD=rootpass'  // Environment variable for MySQL root password
+                }
+            }
+            steps {
+                // MySQL setup and check
+                sh 'mysql --version'  // Check MySQL version
+                sh 'mysql -uroot -prootpass -e "CREATE DATABASE testdb;"'  // Create a test database
+                sh 'mysql -uroot -prootpass -e "SHOW DATABASES;"'  // Verify that the database was created
+            }
+        }
+    }
+}
+
